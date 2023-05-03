@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jquery-lear</title>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="keyword" content="html,css,javascript">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, intaial-scale=1.0">
+	<!---------css-file link -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<!---------css-file link -->
+</head>
+<body>
+	<section class="jquery-main">
+		<div class="container">
+			<div class="main-box">
+				<div class="main-form">
+					<label>Enter text here...</label><br>
+					<textarea id="text-area" rows="10" cols="100" name="comment" form="usrform">How can I trigger the same function from multiple events with jQuery?</textarea>
+					<p>Character Count:<span class="character-count">0</span></p>
+					<p>Word Count:<span class="Word-count">0</span></p>
+				</div>
+				<div class="btn-main">
+					<button id="uppercase">uppercase</button>
+					<button id="lowercase">lowercase</button>
+					<button id="togglecase">togglecase</button>
+					<button id="sentencecase">sentencecase</button>
+					<button id="capitalizeword">Capitalize Word</button>
+					<button id="alternatecase">alternate Case</button>
+					<button id="copy">copy</button>	
+					<button id="download">Download</button>	
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("body").on('input', "#text-area", function(){
+		let value = $(this).val(),
+		split_value = value.split(' ').length;
+		$(".character-count").text( value.length)
+
+		if( value.length ) {
+			$(".Word-count").html(split_value);
+		} else {
+			$(".Word-count").html('0');
+		}
+
+	// 	// let currentlength = $(this).val().length;
+	// 	// let wordcount = $(this).val().split(' ').length;
+
+	// 	// $(".character-count").html(currentlength);
+	// 	// $(".Word-count").html(wordcount);
+	});
+
+	//console.time();
+	//uper case mate 
+	$('#uppercase').on('click',function(){
+		let text = $('#text-area').val().toUpperCase();
+		$('#text-area').val( text )
+	});
+	//console.timeEnd();
+
+	//console.time();
+	//lowercase mate 
+	$('#lowercase').on('click',function(){
+		let lower = $('#text-area').val().toLowerCase();
+		
+		$('#text-area').val(lower);
+	});
+	//console.timeEnd();
+
+	//togglecase mate baki
+	$("#togglecase").on('click', function(){
+		let toggle = $("#text-area").val();
+		let newtoggle = ""
+
+		for(var z = 0; z < toggle.length; z++){
+			if (toggle.charAt(z) === toggle.charAt(z).toUpperCase()) {
+				newtoggle += toggle.charAt(z).toLowerCase();
+			} else {
+				newtoggle += toggle.charAt(z).toUpperCase();
+			}
+			//console.log(newtoggle);
+		}
+		$('#text-area').val(newtoggle);
+	});
+
+	//sentencecase mate
+	$('#sentencecase').on('click', function(){ 
+
+		let text = $('#text-area').val().toLowerCase();
+		let sent = text.charAt(0).toUpperCase();
+		let scase = text.substr(1);
+		let sentenc = sent + scase;
+		//console.log(sentenc);
+		$('#text-area').val(sentenc);
+	})
+
+	//capitaze word mate
+	$("#capitalizeword").on('click', function(){
+
+		let text = $('#text-area').val();
+		let words = text.split(" "); 
+
+		for (var c = 0; c < words.length; c++){
+
+			let firstLetter = words[c].charAt(0);
+			words[c] = firstLetter.toUpperCase() + words[c].substr(1);
+		}
+
+		var capitalize = words.join(" ");
+		$('#text-area').val(capitalize);
+	})
+
+	//alternate case mate
+	$('#alternatecase').on('click', function(){
+		
+		let str = $("#text-area").val();
+	    let words = str.split(" ");
+
+	    for (var i = 0; i < words.length; i++) {
+
+	      let letters = words[i].split("");
+
+	      for (var j = 0; j < letters.length; j++) {
+
+	        if (j % 2 === 0) {
+
+	          letters[j] = letters[j].toUpperCase();
+	        }
+	      }
+
+	      words[i] = letters.join("");
+	    }
+	    let capitalizedStr = words.join(" ");
+	    $('#text-area').val(capitalizedStr);
+	})
+
+	//copy text
+	$('#copy').on('click', function(){
+		let textToCopy = $('#text-area').val();
+	    let tempTextArea = $("<textarea>");
+
+	    $("body").append(tempTextArea);
+	    tempTextArea.val(textToCopy);
+	    tempTextArea.select();
+	    document.execCommand('copy');
+	    tempTextArea.remove();
+	})
+
+
+	//download text
+	$('#download').on('click', function(){
+		let textToDownload = $("#text-area").val();
+		let filename = prompt("Please enter filename");
+		if( ! filename ) {
+			filename = "download";
+		}
+	    let downloadLink = $("<a>");
+
+	    downloadLink.attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(textToDownload));
+	    downloadLink.attr("download", filename +".txt");
+	    downloadLink.css("display", "none");
+	    $("body").append(downloadLink);
+	    downloadLink[0].click();
+	    downloadLink.remove();
+	})
+
+});	
+</script>
